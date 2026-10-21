@@ -74,7 +74,6 @@ input[type=text],input[type=tel],textarea{
 }
 input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(180,83,9,.15)}
 textarea{min-height:88px;resize:vertical}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .pills{display:flex;flex-wrap:wrap;gap:8px;border:0;margin:0;padding:0}
 fieldset.field{margin-top:22px}
 .pills legend{padding:0}
@@ -153,15 +152,9 @@ footer{text-align:center;color:var(--muted);font-size:13px;margin-top:28px}
       <label class="label" for="name">성함<span class="req">*</span></label>
       <input id="name" name="name" type="text" autocomplete="name" maxlength="30" required>
     </div>
-    <div class="field row2">
-      <div>
-        <label class="label" for="gen">기수<span class="req">*</span></label>
-        <input id="gen" name="gen" type="text" inputmode="numeric" placeholder="예: 25기" maxlength="20" required>
-      </div>
-      <div>
-        <label class="label" for="phone">연락처<span class="req">*</span></label>
-        <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="010-1234-5678" maxlength="20" required>
-      </div>
+    <div class="field">
+      <label class="label" for="gen">기수<span class="req">*</span></label>
+      <input id="gen" name="gen" type="text" inputmode="numeric" placeholder="예: 25기" maxlength="20" required>
     </div>
 
     <fieldset class="field pills" data-name="sports">
@@ -278,7 +271,7 @@ if (prev && !closed) {
 }
 
 function fill(d) {
-  ['name', 'gen', 'phone', 'memo'].forEach(k => { if (d[k] != null) form.elements[k].value = d[k]; });
+  ['name', 'gen', 'memo'].forEach(k => { if (d[k] != null) form.elements[k].value = d[k]; });
   ['sports', 'dinner', 'adults', 'kids', 'homecoming'].forEach(k => {
     const el = form.querySelector(`input[name="${k}"][value="${CSS.escape(d[k] || '')}"]`);
     if (el) el.checked = true;
@@ -288,7 +281,7 @@ function fill(d) {
 function collect() {
   const v = k => (form.elements[k].value || '').trim();
   return {
-    name: v('name'), gen: v('gen'), phone: v('phone'),
+    name: v('name'), gen: v('gen'),
     sports: v('sports'), dinner: v('dinner'), adults: v('adults'), kids: v('kids'), homecoming: v('homecoming'),
     memo: v('memo'), website: v('website'),
   };
@@ -308,7 +301,6 @@ function validate(d) {
   const errs = [];
   if (!d.name) errs.push(['name', '성함을 적어주세요.']);
   if (!d.gen) errs.push(['gen', '기수를 적어주세요.']);
-  if (!/^01\d[- ]?\d{3,4}[- ]?\d{4}$/.test(d.phone)) errs.push(['phone', '휴대폰 번호를 확인해주세요. 예: 010-1234-5678']);
   ['sports', 'dinner', 'homecoming'].forEach(k => { if (!d[k]) errs.push([k, '하나를 골라주세요.']); });
   errs.forEach(([k, m]) => showError(k, m));
   if (errs.length) {
